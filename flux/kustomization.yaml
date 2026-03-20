@@ -1,0 +1,62 @@
+---
+# FluxCD Kustomization — instructs Flux to apply the home-assistant manifests
+# from the GitRepository defined in gitrepository.yaml.
+# Apply this to your Flux management cluster alongside flux/gitrepository.yaml.
+#
+# Docs: https://fluxcd.io/flux/components/kustomize/kustomizations/
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: home-assistant
+  namespace: flux-system
+spec:
+  interval: 10m
+  sourceRef:
+    kind: GitRepository
+    name: home-assistant-kustomize
+  path: "./"
+  targetNamespace: home-assistant
+  prune: true
+  wait: true
+  timeout: 5m
+  dependsOn:
+    - name: infrastructure-configs
+  # ---------------------------------------------------------------------------
+  # Optional patches — uncomment any block you need.
+  # ---------------------------------------------------------------------------
+  # patches:
+  #   # -- HostPath storage (replaces the default PVC) -----------------------
+  #   - patch: |
+  #       - op: add
+  #         path: /spec/template/spec/volumes/-
+  #         value:
+  #           name: home-assistant-config
+  #           hostPath:
+  #             path: /opt/home-assistant/config
+  #             type: DirectoryOrCreate
+  #       - op: replace
+  #         path: /spec/template/spec/containers/0/volumeMounts/0
+  #         value:
+  #           name: home-assistant-config
+  #           mountPath: /config
+  #     target:
+  #       kind: StatefulSet
+  #       name: home-assistant
+  #
+  #   # -- Bluetooth / D-Bus passthrough ------------------------------------
+  #   - patch: |
+  #       - op: add
+  #         path: /spec/template/spec/volumes/-
+  #         value:
+  #           name: dbus
+  #           hostPath:
+  #             path: /run/dbus
+  #       - op: add
+  #         path: /spec/template/spec/containers/0/volumeMounts/-
+  #         value:
+  #           name: dbus
+  #           mountPath: /run/dbus
+  #           readOnly: true
+  #     target:
+  #       kind: StatefulSet
+  #       name: home-assistant

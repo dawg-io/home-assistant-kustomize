@@ -29,7 +29,7 @@ This repository contains a Kustomize setup for deploying [Home Assistant](https:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/dawg-io/home-assistant-k8s.git
+git clone https://github.com/dawg-io/home-assistant-kustomize.git
 cd home-assistant-kustomize
 ```
 
@@ -96,7 +96,7 @@ spec:
   interval: 2h
   ref:
     semver: ">=2024.1.1"   # tracks the latest semver tag; change to branch: main if preferred
-  url: https://github.com/dawg-io/home-assistant-k8s.git
+  url: https://github.com/dawg-io/home-assistant-kustomize.git
 
 ---
 # Tells Flux which path to reconcile and into which namespace to deploy

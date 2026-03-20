@@ -49,7 +49,7 @@ jobs:
         env:
           UPSTREAM_REPO: ${{ inputs.upstream_repo }}
         run: |
-          CURRENT_REPO="dawg-io/home-assistant-k8s"
+          CURRENT_REPO="dawg-io/home-assistant-kustomize"
           grep -rlI "$CURRENT_REPO" --exclude-dir='.git' . 2>/dev/null | while read -r file; do
             sed -i "s|${CURRENT_REPO}|${UPSTREAM_REPO}|g" "$file"
           done || true
@@ -65,7 +65,7 @@ jobs:
           # Build commit message in a temp file to safely handle special characters
           {
             printf "deploy: squashed %s commits from %s\n\n" "$COMMIT_COUNT" "$SOURCE_BRANCH"
-            printf "Repository references updated: dawg-io/home-assistant-k8s -> %s\n\n" "$UPSTREAM_REPO"
+            printf "Repository references updated: dawg-io/home-assistant-kustomize -> %s\n\n" "$UPSTREAM_REPO"
             printf "Commit history:\n"
             git log --pretty=format:"- %s (%h)" --max-count=50
           } > /tmp/commit-message.txt
